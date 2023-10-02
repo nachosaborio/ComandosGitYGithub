@@ -1,0 +1,146 @@
+--Commits--
+git init //Inicia el repositorio local
+git add <Nombre de archivo> //Agrega un archivo al staging
+git add . | git add * //Agrega todos los archivos al staging
+git restore --staged <archivo> //Elimina un archivo del staging
+git commit -m "Mensaje" //Crea un commit
+git commit -am "Mensaje" //Add + commit !SOLO FUNCIONA CON ARCHIVOS YA TRACKEADOS CON GIT ADD
+
+--Configuración--
+git config --list //Muestra la configuración actual de git, como nombre y correo
+git config --list --show-origin //Muestra la dirección del archivo donde se guardan las configuraciones
+git config --global user.name "Nombre" //Cambia el nombre del usuario que hace los cambios
+git config --global user.email "you@example.com" //Cambia el correo del usuario que hace los cambios
+
+--Historia--
+git log <nombre de archivo> //Muestra el log de commits de un archivo, da el <commit>
+git log --stat //Muestra el log pero mostrando los cambios a cada archivo
+git show // Muesta el los cambios del último commit
+git show <nombre de archivo> //Muestra los cambios hechos a un archivo en el último commit
+git diff //Muestra las diferencias entre los archivos en disco, y el staging
+git diff <commit> <ccommit> //Compara los cambios de dos commits, se usa el código hexadecimal que aparece usando log
+git log --all --graph //Muestra un gráfico de la historia
+git log --all --graph --decorate --oneline //Muestra un gráfico resumido de la historia
+git reflog //Muestra toda la historia, este comando no perdona nada y lo recuerda todo
+
+--Deshacer cambios--
+git reset <commit> --hard //Devuelve el HEAD al commit indicado, borrando los que estuvieran después, incluyendo staging
+git resed <commit> --soft //Devuelve el HEAD al commit indicado, borrando los que estuvieran después, pero conserva el staging
+git reset HEAD //Deshace los cambios hechos para volver a HEAD
+git checkout <commit> <archivo> //Devuelve un archivo a como se guardó en una commit anterior
+git checkout main <archivo> //deshace el comando anterior y devuelve el archivo a su commit de main
+git rm --cached //Elimina archivos del repositorio local y del área de staging, pero los mantiene en el disco duro. Deja de trackear el historial de cambios de estos archivos, por lo que quedan en estado untracked.
+git rm --force //Elimina los archivos de Git y del disco duro.
+git revert <commit> //Crea un nuevo commit copiando una commit anterior, así se puede deshacer los cambios pero manteniendo los commits más nuevos
+git commit -ammend -m "Mensaje" //Repara el último commit
+
+--Ramas/branches--
+gitk //GUI
+git show //Muestra las branches, y apunta en cuál está el HEAD
+git branch //Muestra las branches
+git branch -r //Muestra las branches remotas
+git branch -a //Muestra todas las branches, locales y remotas
+git branch <Nombre> //Crea un branch
+git checkout <branch> //Cambia el HEAD a un branch
+git branch -m <Nombre> //Cambia el nombre de un branch
+git show-branch //Muestra las branches y su historia
+git show-branch --all //Muestra las branches y una historia extendida
+
+--Merge--
+! Primero hay que poner el HEAD en la branch de destino, luego se puede hacer el merge
+git merge <branch> //Trae un branch al actual y los funciona
+! Si hay conflictos, git actualiza los archivos para indicar cuál es el error,
+! Hay que seleccionar con cuál versión te quedas, y luego hacer un commit para solucionar el conflicto 
+Ejemplo:
+"<<<<<<< yours:sample.txt
+Conflict resolution is hard;
+let's go shopping.
+=======
+Git makes conflict resolution easy.
+">>>>>>> theirs:sample.txt
+
+--SSH--
+ssh-keygen -t ed25519 -C "your_email@example.com" //Crea un par de llaves públicas y privadas
+eval "$(ssh-agent -s)" //Revisa que el agente de SSH esté funcionando
+ssh-add ~/.ssh/id_rsa //Agrega la llave privada al agente de SSH
+
+--Github--
+git remote add origin <URL> //Establece el repositorio remoto del proyecto
+git remote //Muestra si hay un origin
+git remote -v //Muestra más detalles del origin
+git clone <URL> //Clona un repositorio remoto
+git pull origin <branch a traer>//Trae la versión más actualizada del repositorio remoto
+git pull origin <branch a traer> --allow-unrelated-histories //Permite hacer un pull que tiene una hitoria diferente en remoto y local
+git push origin <branch a enviar> //Hace un push a la rama main del repositorio remoto
+
+--Alias--
+alias <nombre de alias>="comando a guardar" //Crea un alias
+git config --global alias.<nombre de alias> "comando" //Guarda el alias permanentemente
+
+--Tags--
+git tag -a <nombre de tag> -m "Mensaje del tag" <commit> //Crea un tag
+git tag //Muestra los tags
+git show-ref --tags //Muestra los tags y sus commits asociados
+git push origin --tags //Envía tags al repositorio remoto
+git tag -d <tag> //Borra un tag
+git push origin :refs/tags/<tag> //Borra un tag en el repositorio remoto
+
+--Forks--
+git remote add upstream <URL> //Crea otra fuente para hacer pull, si mi proyecto es fork de otro, para poder hacer pull al original
+git pull upstream <branch> //Hace un pull del proyecto original al que yo le hice fork
+git push origin <brach> //Envía la fusión a mi repositorio remoto
+
+--Rebase--
+git rebase <branch>//Pega la rama en la que estás a otra rama, haciendo como si la rama en la que estás nunca hubiera existido
+//Primero se hace rebase en la rama que quiero eliminar, y luego en la rama principal
+
+--Stash--
+git stash //Guarda temporalmente los cambios en stash, para poder cambiar de branch sin tener que hace commit
+git stash pop //Libera el stash en el branch actual
+git stash list //Muestra si hay algo en stash
+git stash brach <Nombre> //Libera el stash en una nueva rama
+git stash drop //Borra el stash
+
+--Clean-- 
+git clean //Borra del disco archivos en staging que aún no han sido trackeados, este comando no funciona solo
+git clean --dry-run //Simula cuáles archivos se van a borrar
+git clean -f //Los borra en serio
+
+--Cherry-pick--
+git cherry-pick <commit> //Trae un comit de otra rama a mi rama actual
+
+--Grep y Log--
+git grep <N> //Permite buscar en los archivos de tu repositorio utilizando expresiones regulares.
+git grep -n <N> //Muestra la línea en la que está el término
+git grep -c <N> //Solo muestra la cantidad de veces que se usa el término
+git log -S "N" //Busca el término en el log
+
+--Misceláneo--
+git shortlog //Muestra los commits por usuario
+git shorlog -sn //Muestra cuántos commits hizo cada usuario
+git shortlog -sn --all //Muestra todos los commits incluyendo los borrados
+git shortlog -sn --all --no-merges //No incluye merges
+git blame -c <archivo> //Muestra quién modificó cada línea en el archivo
+git blame -c <archivo> -LX,Y //Muestra quién modificó cada línea en el archivo, desde X hasta Y
+
+--Gitignore--
+Se crea un archivo .gitignore, se agregan los archivos más o menos así:
+# ignore all .a files
+*.a
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+# only ignore the TODO file in the current directory, not subdir/TODO
+/TODO
+# ignore all files in any directory named build
+build/
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+# ignore all .pdf files in the doc/ directory and any of its subdirectories
+doc/**/*.pdf
+Se pueden crear fácilmente en https://www.gitignore.io/
+
+--README.md--
+https://pandao.github.io/editor.md/en.html
+
+--Github pages--
+https://pages.github.com/
